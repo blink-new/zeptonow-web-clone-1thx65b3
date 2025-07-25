@@ -1,420 +1,359 @@
-import { useState } from 'react'
-import { Plane, Hotel, Train, MapPin, Calendar, Users, Search, Menu, User, ChevronDown } from 'lucide-react'
+import React, { useState } from 'react'
+import { Search, Globe, Menu, User, Heart, Star, MapPin, Calendar, Users, Filter, ChevronLeft, ChevronRight } from 'lucide-react'
 import { Button } from './components/ui/button'
 import { Input } from './components/ui/input'
 import { Card, CardContent } from './components/ui/card'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from './components/ui/tabs'
 import { Badge } from './components/ui/badge'
 
 function App() {
-  const [activeTab, setActiveTab] = useState('flights')
+  const [activeTab, setActiveTab] = useState('stays')
+  const [searchLocation, setSearchLocation] = useState('')
+  const [checkIn, setCheckIn] = useState('')
+  const [checkOut, setCheckOut] = useState('')
+  const [guests, setGuests] = useState(1)
+
+  const categories = [
+    { name: 'Beachfront', icon: '🏖️' },
+    { name: 'Cabins', icon: '🏕️' },
+    { name: 'Trending', icon: '🔥' },
+    { name: 'Countryside', icon: '🌾' },
+    { name: 'Amazing pools', icon: '🏊‍♂️' },
+    { name: 'Islands', icon: '🏝️' },
+    { name: 'National parks', icon: '🏞️' },
+    { name: 'Tiny homes', icon: '🏠' },
+    { name: 'Lakefront', icon: '🏞️' },
+    { name: 'Design', icon: '🎨' },
+    { name: 'Skiing', icon: '⛷️' },
+    { name: 'Castles', icon: '🏰' }
+  ]
+
+  const properties = [
+    {
+      id: 1,
+      images: ['https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=400&h=300&fit=crop'],
+      title: 'Entire villa in Santorini, Greece',
+      type: 'Entire villa',
+      guests: 8,
+      bedrooms: 4,
+      bathrooms: 3,
+      price: 245,
+      rating: 4.95,
+      reviews: 127,
+      host: 'Superhost',
+      distance: '2,341 kilometers away',
+      dates: 'Nov 1-6'
+    },
+    {
+      id: 2,
+      images: ['https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=400&h=300&fit=crop'],
+      title: 'Cozy cabin in Aspen, Colorado',
+      type: 'Entire cabin',
+      guests: 6,
+      bedrooms: 3,
+      bathrooms: 2,
+      price: 189,
+      rating: 4.87,
+      reviews: 89,
+      host: 'Superhost',
+      distance: '1,234 kilometers away',
+      dates: 'Nov 3-8'
+    },
+    {
+      id: 3,
+      images: ['https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=400&h=300&fit=crop'],
+      title: 'Modern apartment in Tokyo, Japan',
+      type: 'Entire apartment',
+      guests: 4,
+      bedrooms: 2,
+      bathrooms: 1,
+      price: 156,
+      rating: 4.92,
+      reviews: 203,
+      host: 'Superhost',
+      distance: '8,567 kilometers away',
+      dates: 'Nov 5-10'
+    },
+    {
+      id: 4,
+      images: ['https://images.unsplash.com/photo-1520637836862-4d197d17c90a?w=400&h=300&fit=crop'],
+      title: 'Beachfront house in Malibu, California',
+      type: 'Entire house',
+      guests: 10,
+      bedrooms: 5,
+      bathrooms: 4,
+      price: 425,
+      rating: 4.98,
+      reviews: 156,
+      host: 'Superhost',
+      distance: '456 kilometers away',
+      dates: 'Nov 2-7'
+    },
+    {
+      id: 5,
+      images: ['https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&h=300&fit=crop'],
+      title: 'Luxury loft in New York City',
+      type: 'Entire loft',
+      guests: 6,
+      bedrooms: 3,
+      bathrooms: 2,
+      price: 312,
+      rating: 4.89,
+      reviews: 94,
+      host: 'Superhost',
+      distance: '789 kilometers away',
+      dates: 'Nov 4-9'
+    },
+    {
+      id: 6,
+      images: ['https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=400&h=300&fit=crop'],
+      title: 'Charming cottage in Cotswolds, England',
+      type: 'Entire cottage',
+      guests: 4,
+      bedrooms: 2,
+      bathrooms: 1,
+      price: 134,
+      rating: 4.94,
+      reviews: 78,
+      host: 'Superhost',
+      distance: '3,456 kilometers away',
+      dates: 'Nov 6-11'
+    }
+  ]
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
+      <header className="sticky top-0 z-50 bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
+          <div className="flex items-center justify-between h-20">
             {/* Logo */}
             <div className="flex items-center">
-              <div className="text-2xl font-bold text-primary">MakeMyTrip</div>
+              <div className="text-2xl font-bold text-primary">
+                <span className="text-primary">airbnb</span>
+              </div>
             </div>
 
-            {/* Navigation */}
-            <nav className="hidden md:flex items-center space-x-8">
-              <a href="#" className="text-gray-700 hover:text-primary font-medium">Flights</a>
-              <a href="#" className="text-gray-700 hover:text-primary font-medium">Hotels</a>
-              <a href="#" className="text-gray-700 hover:text-primary font-medium">Trains</a>
-              <a href="#" className="text-gray-700 hover:text-primary font-medium">Holidays</a>
-              <a href="#" className="text-gray-700 hover:text-primary font-medium">Buses</a>
-              <a href="#" className="text-gray-700 hover:text-primary font-medium">Cabs</a>
-            </nav>
+            {/* Search Bar */}
+            <div className="hidden md:flex items-center bg-white border border-gray-300 rounded-full shadow-md hover:shadow-lg transition-shadow duration-200 p-2">
+              <div className="flex items-center px-4 py-2 border-r border-gray-300">
+                <div className="text-sm">
+                  <div className="font-medium text-gray-900">Where</div>
+                  <input 
+                    type="text" 
+                    placeholder="Search destinations" 
+                    className="text-gray-500 bg-transparent border-none outline-none w-32"
+                    value={searchLocation}
+                    onChange={(e) => setSearchLocation(e.target.value)}
+                  />
+                </div>
+              </div>
+              <div className="flex items-center px-4 py-2 border-r border-gray-300">
+                <div className="text-sm">
+                  <div className="font-medium text-gray-900">Check in</div>
+                  <input 
+                    type="text" 
+                    placeholder="Add dates" 
+                    className="text-gray-500 bg-transparent border-none outline-none w-20"
+                    value={checkIn}
+                    onChange={(e) => setCheckIn(e.target.value)}
+                  />
+                </div>
+              </div>
+              <div className="flex items-center px-4 py-2 border-r border-gray-300">
+                <div className="text-sm">
+                  <div className="font-medium text-gray-900">Check out</div>
+                  <input 
+                    type="text" 
+                    placeholder="Add dates" 
+                    className="text-gray-500 bg-transparent border-none outline-none w-20"
+                    value={checkOut}
+                    onChange={(e) => setCheckOut(e.target.value)}
+                  />
+                </div>
+              </div>
+              <div className="flex items-center px-4 py-2">
+                <div className="text-sm">
+                  <div className="font-medium text-gray-900">Who</div>
+                  <input 
+                    type="text" 
+                    placeholder="Add guests" 
+                    className="text-gray-500 bg-transparent border-none outline-none w-20"
+                    value={guests > 1 ? `${guests} guests` : 'Add guests'}
+                    readOnly
+                  />
+                </div>
+              </div>
+              <Button size="sm" className="bg-primary hover:bg-primary/90 text-white rounded-full p-2 ml-2">
+                <Search className="h-4 w-4" />
+              </Button>
+            </div>
 
-            {/* User Actions */}
+            {/* Right Menu */}
             <div className="flex items-center space-x-4">
-              <Button variant="ghost" size="sm" className="hidden md:flex items-center space-x-2">
-                <User className="h-4 w-4" />
-                <span>Login or Create Account</span>
+              <Button variant="ghost" className="hidden md:flex items-center text-sm font-medium">
+                Airbnb your home
               </Button>
-              <Button variant="ghost" size="sm" className="md:hidden">
-                <Menu className="h-5 w-5" />
+              <Button variant="ghost" size="sm" className="p-2">
+                <Globe className="h-4 w-4" />
               </Button>
+              <div className="flex items-center border border-gray-300 rounded-full p-1 hover:shadow-md transition-shadow">
+                <Button variant="ghost" size="sm" className="p-2">
+                  <Menu className="h-4 w-4" />
+                </Button>
+                <Button variant="ghost" size="sm" className="p-2">
+                  <User className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
           </div>
         </div>
       </header>
 
-      {/* Hero Section with Search */}
-      <section className="bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="text-center mb-8">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              Where do you want to go?
-            </h1>
-            <p className="text-xl text-blue-100">
-              Book flights, hotels, trains & holiday packages
-            </p>
-          </div>
-
-          {/* Search Tabs */}
-          <div className="max-w-4xl mx-auto">
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className="grid w-full grid-cols-4 bg-white/10 backdrop-blur-sm">
-                <TabsTrigger value="flights" className="flex items-center space-x-2 data-[state=active]:bg-white data-[state=active]:text-blue-700">
-                  <Plane className="h-4 w-4" />
-                  <span>Flights</span>
-                </TabsTrigger>
-                <TabsTrigger value="hotels" className="flex items-center space-x-2 data-[state=active]:bg-white data-[state=active]:text-blue-700">
-                  <Hotel className="h-4 w-4" />
-                  <span>Hotels</span>
-                </TabsTrigger>
-                <TabsTrigger value="trains" className="flex items-center space-x-2 data-[state=active]:bg-white data-[state=active]:text-blue-700">
-                  <Train className="h-4 w-4" />
-                  <span>Trains</span>
-                </TabsTrigger>
-                <TabsTrigger value="holidays" className="flex items-center space-x-2 data-[state=active]:bg-white data-[state=active]:text-blue-700">
-                  <MapPin className="h-4 w-4" />
-                  <span>Holidays</span>
-                </TabsTrigger>
-              </TabsList>
-
-              {/* Flight Search Form */}
-              <TabsContent value="flights" className="mt-6">
-                <Card className="bg-white/95 backdrop-blur-sm">
-                  <CardContent className="p-6">
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      <Badge variant="outline" className="bg-white">One Way</Badge>
-                      <Badge variant="secondary">Round Trip</Badge>
-                      <Badge variant="secondary">Multi City</Badge>
-                    </div>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-                      <div className="relative">
-                        <label className="block text-sm font-medium text-gray-700 mb-1">From</label>
-                        <div className="relative">
-                          <MapPin className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                          <Input 
-                            placeholder="Delhi" 
-                            className="pl-10 h-12"
-                          />
-                        </div>
-                      </div>
-                      
-                      <div className="relative">
-                        <label className="block text-sm font-medium text-gray-700 mb-1">To</label>
-                        <div className="relative">
-                          <MapPin className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                          <Input 
-                            placeholder="Mumbai" 
-                            className="pl-10 h-12"
-                          />
-                        </div>
-                      </div>
-                      
-                      <div className="relative">
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Departure</label>
-                        <div className="relative">
-                          <Calendar className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                          <Input 
-                            placeholder="Select Date" 
-                            className="pl-10 h-12"
-                          />
-                        </div>
-                      </div>
-                      
-                      <div className="relative">
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Travellers & Class</label>
-                        <div className="relative">
-                          <Users className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                          <Input 
-                            placeholder="1 Traveller, Economy" 
-                            className="pl-10 h-12"
-                            readOnly
-                          />
-                          <ChevronDown className="absolute right-3 top-3 h-4 w-4 text-gray-400" />
-                        </div>
-                      </div>
-                      
-                      <div className="flex items-end">
-                        <Button className="w-full h-12 bg-accent hover:bg-accent/90 text-white font-semibold">
-                          <Search className="h-4 w-4 mr-2" />
-                          Search
-                        </Button>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-
-              {/* Hotel Search Form */}
-              <TabsContent value="hotels" className="mt-6">
-                <Card className="bg-white/95 backdrop-blur-sm">
-                  <CardContent className="p-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                      <div className="relative">
-                        <label className="block text-sm font-medium text-gray-700 mb-1">City, Property Name</label>
-                        <div className="relative">
-                          <MapPin className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                          <Input 
-                            placeholder="Goa" 
-                            className="pl-10 h-12"
-                          />
-                        </div>
-                      </div>
-                      
-                      <div className="relative">
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Check-in</label>
-                        <div className="relative">
-                          <Calendar className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                          <Input 
-                            placeholder="Select Date" 
-                            className="pl-10 h-12"
-                          />
-                        </div>
-                      </div>
-                      
-                      <div className="relative">
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Check-out</label>
-                        <div className="relative">
-                          <Calendar className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                          <Input 
-                            placeholder="Select Date" 
-                            className="pl-10 h-12"
-                          />
-                        </div>
-                      </div>
-                      
-                      <div className="flex items-end">
-                        <Button className="w-full h-12 bg-accent hover:bg-accent/90 text-white font-semibold">
-                          <Search className="h-4 w-4 mr-2" />
-                          Search
-                        </Button>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-
-              {/* Train Search Form */}
-              <TabsContent value="trains" className="mt-6">
-                <Card className="bg-white/95 backdrop-blur-sm">
-                  <CardContent className="p-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                      <div className="relative">
-                        <label className="block text-sm font-medium text-gray-700 mb-1">From</label>
-                        <div className="relative">
-                          <Train className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                          <Input 
-                            placeholder="New Delhi" 
-                            className="pl-10 h-12"
-                          />
-                        </div>
-                      </div>
-                      
-                      <div className="relative">
-                        <label className="block text-sm font-medium text-gray-700 mb-1">To</label>
-                        <div className="relative">
-                          <Train className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                          <Input 
-                            placeholder="Mumbai" 
-                            className="pl-10 h-12"
-                          />
-                        </div>
-                      </div>
-                      
-                      <div className="relative">
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Travel Date</label>
-                        <div className="relative">
-                          <Calendar className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                          <Input 
-                            placeholder="Select Date" 
-                            className="pl-10 h-12"
-                          />
-                        </div>
-                      </div>
-                      
-                      <div className="flex items-end">
-                        <Button className="w-full h-12 bg-accent hover:bg-accent/90 text-white font-semibold">
-                          <Search className="h-4 w-4 mr-2" />
-                          Search
-                        </Button>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-
-              {/* Holiday Search Form */}
-              <TabsContent value="holidays" className="mt-6">
-                <Card className="bg-white/95 backdrop-blur-sm">
-                  <CardContent className="p-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                      <div className="relative">
-                        <label className="block text-sm font-medium text-gray-700 mb-1">From</label>
-                        <div className="relative">
-                          <MapPin className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                          <Input 
-                            placeholder="Delhi" 
-                            className="pl-10 h-12"
-                          />
-                        </div>
-                      </div>
-                      
-                      <div className="relative">
-                        <label className="block text-sm font-medium text-gray-700 mb-1">To</label>
-                        <div className="relative">
-                          <MapPin className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                          <Input 
-                            placeholder="Goa" 
-                            className="pl-10 h-12"
-                          />
-                        </div>
-                      </div>
-                      
-                      <div className="relative">
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Departure Date</label>
-                        <div className="relative">
-                          <Calendar className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                          <Input 
-                            placeholder="Select Date" 
-                            className="pl-10 h-12"
-                          />
-                        </div>
-                      </div>
-                      
-                      <div className="flex items-end">
-                        <Button className="w-full h-12 bg-accent hover:bg-accent/90 text-white font-semibold">
-                          <Search className="h-4 w-4 mr-2" />
-                          Search
-                        </Button>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-            </Tabs>
+      {/* Categories */}
+      <div className="border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between py-4">
+            <div className="flex items-center space-x-8 overflow-x-auto">
+              {categories.map((category, index) => (
+                <div key={index} className="flex flex-col items-center space-y-2 cursor-pointer hover:text-gray-900 transition-colors min-w-0 flex-shrink-0">
+                  <div className="text-2xl">{category.icon}</div>
+                  <span className="text-xs font-medium text-gray-600 whitespace-nowrap">{category.name}</span>
+                </div>
+              ))}
+            </div>
+            <div className="flex items-center space-x-4 ml-4">
+              <Button variant="outline" size="sm" className="flex items-center space-x-2">
+                <Filter className="h-4 w-4" />
+                <span>Filters</span>
+              </Button>
+            </div>
           </div>
         </div>
-      </section>
+      </div>
 
-      {/* Popular Destinations */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Popular Destinations</h2>
-            <p className="text-gray-600">Discover amazing places around the world</p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              { name: 'Goa', image: 'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=400&h=300&fit=crop', price: '₹8,999' },
-              { name: 'Dubai', image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=400&h=300&fit=crop', price: '₹24,999' },
-              { name: 'Thailand', image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', price: '₹18,999' },
-              { name: 'Singapore', image: 'https://images.unsplash.com/photo-1525625293386-3f8f99389edd?w=400&h=300&fit=crop', price: '₹22,999' }
-            ].map((destination, index) => (
-              <Card key={index} className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer">
-                <div className="relative h-48">
+      {/* Main Content */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Properties Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {properties.map((property) => (
+            <Card key={property.id} className="property-card border-none shadow-none hover:shadow-lg transition-all duration-200 cursor-pointer">
+              <CardContent className="p-0">
+                {/* Property Image */}
+                <div className="relative aspect-square rounded-xl overflow-hidden mb-3">
                   <img 
-                    src={destination.image} 
-                    alt={destination.name}
+                    src={property.images[0]} 
+                    alt={property.title}
                     className="w-full h-full object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-                  <div className="absolute bottom-4 left-4 text-white">
-                    <h3 className="text-xl font-semibold">{destination.name}</h3>
-                    <p className="text-sm">Starting from {destination.price}</p>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="absolute top-3 right-3 p-2 bg-white/80 hover:bg-white rounded-full"
+                  >
+                    <Heart className="h-4 w-4" />
+                  </Button>
+                  {property.host === 'Superhost' && (
+                    <Badge className="absolute top-3 left-3 bg-white text-gray-900 text-xs font-medium">
+                      Superhost
+                    </Badge>
+                  )}
+                </div>
+
+                {/* Property Details */}
+                <div className="space-y-1">
+                  <div className="flex items-center justify-between">
+                    <h3 className="font-medium text-gray-900 truncate">{property.title}</h3>
+                    <div className="flex items-center space-x-1">
+                      <Star className="h-4 w-4 fill-current text-gray-900" />
+                      <span className="text-sm font-medium">{property.rating}</span>
+                    </div>
+                  </div>
+                  
+                  <p className="text-sm text-gray-600">{property.distance}</p>
+                  <p className="text-sm text-gray-600">{property.dates}</p>
+                  
+                  <div className="flex items-baseline space-x-1 pt-1">
+                    <span className="font-semibold text-gray-900">${property.price}</span>
+                    <span className="text-sm text-gray-600">night</span>
                   </div>
                 </div>
-              </Card>
-            ))}
-          </div>
+              </CardContent>
+            </Card>
+          ))}
         </div>
-      </section>
 
-      {/* Services Section */}
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Why Choose MakeMyTrip?</h2>
-            <p className="text-gray-600">Your trusted travel partner for over 20 years</p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                icon: <Plane className="h-8 w-8 text-primary" />,
-                title: 'Best Flight Deals',
-                description: 'Compare prices from 450+ airlines and get the best deals on domestic and international flights.'
-              },
-              {
-                icon: <Hotel className="h-8 w-8 text-primary" />,
-                title: 'Verified Hotels',
-                description: 'Choose from 1M+ hotels worldwide with genuine reviews and photos from real travelers.'
-              },
-              {
-                icon: <MapPin className="h-8 w-8 text-primary" />,
-                title: '24/7 Support',
-                description: 'Get round-the-clock assistance for all your travel needs with our dedicated support team.'
-              }
-            ].map((service, index) => (
-              <Card key={index} className="text-center p-6 hover:shadow-lg transition-shadow">
-                <CardContent className="pt-6">
-                  <div className="flex justify-center mb-4">
-                    {service.icon}
-                  </div>
-                  <h3 className="text-xl font-semibold mb-3">{service.title}</h3>
-                  <p className="text-gray-600">{service.description}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+        {/* Load More */}
+        <div className="flex justify-center mt-12">
+          <Button variant="outline" className="px-8 py-3">
+            Show more
+          </Button>
         </div>
-      </section>
+      </main>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <footer className="bg-gray-50 border-t border-gray-200 mt-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
-              <h3 className="text-xl font-bold mb-4">MakeMyTrip</h3>
-              <p className="text-gray-400 mb-4">
-                India's leading travel company, providing comprehensive travel solutions.
-              </p>
-            </div>
-            
-            <div>
-              <h4 className="font-semibold mb-4">Quick Links</h4>
-              <ul className="space-y-2 text-gray-400">
-                <li><a href="#" className="hover:text-white">Flights</a></li>
-                <li><a href="#" className="hover:text-white">Hotels</a></li>
-                <li><a href="#" className="hover:text-white">Trains</a></li>
-                <li><a href="#" className="hover:text-white">Holidays</a></li>
+              <h3 className="font-semibold text-gray-900 mb-4">Support</h3>
+              <ul className="space-y-3 text-sm text-gray-600">
+                <li><a href="#" className="hover:text-gray-900">Help Center</a></li>
+                <li><a href="#" className="hover:text-gray-900">AirCover</a></li>
+                <li><a href="#" className="hover:text-gray-900">Anti-discrimination</a></li>
+                <li><a href="#" className="hover:text-gray-900">Disability support</a></li>
+                <li><a href="#" className="hover:text-gray-900">Cancellation options</a></li>
               </ul>
             </div>
-            
             <div>
-              <h4 className="font-semibold mb-4">Support</h4>
-              <ul className="space-y-2 text-gray-400">
-                <li><a href="#" className="hover:text-white">Customer Care</a></li>
-                <li><a href="#" className="hover:text-white">FAQ</a></li>
-                <li><a href="#" className="hover:text-white">Cancellation</a></li>
-                <li><a href="#" className="hover:text-white">Refund</a></li>
+              <h3 className="font-semibold text-gray-900 mb-4">Hosting</h3>
+              <ul className="space-y-3 text-sm text-gray-600">
+                <li><a href="#" className="hover:text-gray-900">Airbnb your home</a></li>
+                <li><a href="#" className="hover:text-gray-900">AirCover for Hosts</a></li>
+                <li><a href="#" className="hover:text-gray-900">Hosting resources</a></li>
+                <li><a href="#" className="hover:text-gray-900">Community forum</a></li>
+                <li><a href="#" className="hover:text-gray-900">Hosting responsibly</a></li>
               </ul>
             </div>
-            
             <div>
-              <h4 className="font-semibold mb-4">Company</h4>
-              <ul className="space-y-2 text-gray-400">
-                <li><a href="#" className="hover:text-white">About Us</a></li>
-                <li><a href="#" className="hover:text-white">Careers</a></li>
-                <li><a href="#" className="hover:text-white">Privacy Policy</a></li>
-                <li><a href="#" className="hover:text-white">Terms & Conditions</a></li>
+              <h3 className="font-semibold text-gray-900 mb-4">Airbnb</h3>
+              <ul className="space-y-3 text-sm text-gray-600">
+                <li><a href="#" className="hover:text-gray-900">Newsroom</a></li>
+                <li><a href="#" className="hover:text-gray-900">New features</a></li>
+                <li><a href="#" className="hover:text-gray-900">Careers</a></li>
+                <li><a href="#" className="hover:text-gray-900">Investors</a></li>
+                <li><a href="#" className="hover:text-gray-900">Gift cards</a></li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-semibold text-gray-900 mb-4">Legal</h3>
+              <ul className="space-y-3 text-sm text-gray-600">
+                <li><a href="#" className="hover:text-gray-900">Terms of Service</a></li>
+                <li><a href="#" className="hover:text-gray-900">Privacy Policy</a></li>
+                <li><a href="#" className="hover:text-gray-900">Cookie Policy</a></li>
+                <li><a href="#" className="hover:text-gray-900">Sitemap</a></li>
               </ul>
             </div>
           </div>
           
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 MakeMyTrip. All rights reserved.</p>
+          <div className="border-t border-gray-200 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+            <div className="flex items-center space-x-4 text-sm text-gray-600">
+              <span>© 2024 Airbnb, Inc.</span>
+              <span>·</span>
+              <a href="#" className="hover:text-gray-900">Privacy</a>
+              <span>·</span>
+              <a href="#" className="hover:text-gray-900">Terms</a>
+              <span>·</span>
+              <a href="#" className="hover:text-gray-900">Sitemap</a>
+            </div>
+            <div className="flex items-center space-x-4 mt-4 md:mt-0">
+              <Button variant="ghost" size="sm" className="flex items-center space-x-2">
+                <Globe className="h-4 w-4" />
+                <span className="text-sm">English (US)</span>
+              </Button>
+              <Button variant="ghost" size="sm" className="text-sm">
+                $ USD
+              </Button>
+            </div>
           </div>
         </div>
       </footer>
